@@ -9,7 +9,9 @@ Projet IoT (ISIMS) : une poupée qui pose des questions à l'enfant, évalue ses
 - `docs/` : schéma de câblage et photos
 
 ## Installation
-(à compléter)
+python3 -m venv /tmp/test-venv
+source /tmp/test-venv/bin/activate
+pip install -r requirements.txt
 
 ## Schéma de câblage
 (à compléter)
