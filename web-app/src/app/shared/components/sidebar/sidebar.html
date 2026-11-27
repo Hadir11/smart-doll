@@ -1,0 +1,21 @@
+<aside class="hidden w-60 shrink-0 flex-col rounded-3xl bg-linear-to-b from-[#5B49C2] to-[#3E3194] p-5 text-white md:flex">
+  <div class="mb-8 text-center">
+    <img src="/images/logo.png" alt="" class="mx-auto h-14 w-14" />
+    <p class="text-xl font-bold">Smart Doll</p>
+    <p class="text-[11px] text-white/70">Learn • Grow • Smile</p>
+  </div>
+
+  <nav class="space-y-1">
+    @for (l of links; track l.path) {
+      <a [routerLink]="l.path" routerLinkActive="bg-white/20 font-semibold"
+         class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-white/90 hover:bg-white/10">
+        <span>{{ l.icon }}</span>{{ l.label }}
+      </a>
+    }
+  </nav>
+
+  <button (click)="logout()"
+          class="mt-auto flex items-center justify-center gap-2 rounded-full border border-white/40 py-2.5 text-sm hover:bg-white/10">
+    ↪ Déconnexion
+  </button>
+</aside>

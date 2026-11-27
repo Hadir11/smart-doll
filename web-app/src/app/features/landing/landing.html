@@ -1,0 +1,56 @@
+<div class="min-h-screen bg-surface p-6 text-ink">
+  <div class="mx-auto max-w-[1200px] rounded-[28px] bg-white px-6 pb-8 pt-5 md:px-10">
+
+    <header class="flex flex-wrap items-center justify-between gap-4">
+      <a routerLink="/" class="flex items-center gap-2.5">
+        <app-mascot [size]="44" />
+        <span class="text-[22px] font-extrabold text-navy">Smart Doll</span>
+      </a>
+      <nav class="hidden gap-8 text-sm font-semibold md:flex">
+        <a href="#fonctionnalites" class="hover:text-primary">Fonctionnalités</a>
+        <a href="#avantages" class="hover:text-primary">Avantages</a>
+        <a href="#apropos" class="hover:text-primary">À propos</a>
+      </nav>
+      <a routerLink="/login"
+         class="rounded-full bg-primary px-[22px] py-3 text-sm font-bold text-white hover:bg-primary-dark">
+        Se connecter
+      </a>
+    </header>
+
+    <section id="fonctionnalites" class="flex flex-wrap items-center gap-8 pb-8 pt-12">
+      <div class="min-w-[320px] flex-1">
+        <h1 class="text-4xl font-extrabold leading-[1.1] text-navy md:text-[52px]">
+          Smart Doll<br />
+          <span class="text-primary">Une poupée éducative</span><br />
+          intelligente pour apprendre en s'amusant !
+        </h1>
+        <p class="mt-5 max-w-[460px] text-[17px] leading-relaxed">
+          Accompagne votre enfant dans son apprentissage avec une technologie
+          innovante et bienveillante.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a routerLink="/register"
+             class="rounded-full bg-primary px-7 py-3.5 font-bold text-white hover:bg-primary-dark">
+            Commencer maintenant →
+          </a>
+          <a href="#avantages"
+             class="rounded-full border-2 border-primary px-[26px] py-3 font-bold text-primary hover:bg-primary-soft">
+            En savoir plus
+          </a>
+        </div>
+      </div>
+
+      <div class="flex min-w-[300px] flex-1 justify-center">
+        <div class="flex h-[360px] w-[360px] items-center justify-center rounded-full bg-primary-soft">
+          <app-mascot [size]="260" />
+        </div>
+      </div>
+    </section>
+
+    <section id="avantages" class="flex flex-wrap gap-10 border-t border-primary-soft pt-6 text-sm font-bold text-navy">
+      @for (p of perks; track p) {
+        <span>{{ p }}</span>
+      }
+    </section>
+  </div>
+</div>

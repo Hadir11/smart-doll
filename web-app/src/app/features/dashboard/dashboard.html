@@ -1,0 +1,145 @@
+<div class="space-y-4">
+
+  <!-- Bandeau enfant + stats -->
+  <section class="grid gap-4 xl:grid-cols-[1fr_2fr]">
+    <div class="flex items-center gap-4 rounded-2xl bg-white p-5 shadow-sm">
+      <div class="text-center">
+        <img src="/images/lina.png" alt="" class="mx-auto h-24 w-24 rounded-full object-cover" />
+        <p class="mt-1 text-xs text-ink">{{ child.name }} • {{ child.age }} ans</p>
+      </div>
+      <div>
+        <h2 class="text-2xl font-bold text-navy">Bonjour, {{ auth.user()?.name }} ! 👋</h2>
+        <p class="text-sm text-ink/70">Voici un aperçu des progrès de votre enfant cette semaine.</p>
+        <div class="mt-3 inline-block rounded-xl bg-primary-soft px-3 py-1.5 text-center">
+          <p class="text-sm font-bold text-navy">{{ child.time }}</p>
+          <span class="rounded-full bg-primary px-2 py-0.5 text-[10px] text-white">{{ child.level }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+      @for (s of stats; track s.label) {
+        <div class="rounded-2xl bg-white p-4 shadow-sm">
+          <div class="text-2xl">{{ s.icon }}</div>
+          <p class="mt-2 text-xl font-bold text-navy">{{ s.value }}</p>
+          <p class="text-xs text-ink/70">{{ s.label }}</p>
+          <p class="mt-1 text-xs font-medium text-success">↑ {{ s.trend }}</p>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- Graphique + matières + poupée -->
+  <section class="grid gap-4 xl:grid-cols-[2fr_1.3fr_1.3fr]">
+
+    <div class="rounded-2xl bg-white p-5 shadow-sm">
+      <div class="mb-3 flex items-center justify-between">
+        <h3 class="font-semibold text-navy">📊 Progression hebdomadaire</h3>
+        <select class="rounded-lg border border-gray-200 px-2 py-1 text-xs">
+          <option>Cette semaine</option>
+        </select>
+      </div>
+      <svg viewBox="0 0 700 220" class="w-full">
+        <defs>
+          <linearGradient id="area" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#7C5CFA" stop-opacity="0.35" />
+            <stop offset="100%" stop-color="#7C5CFA" stop-opacity="0" />
+          </linearGradient>
+        </defs>
+        @for (t of ticks; track t.v) {
+          <line [attr.x1]="50" [attr.x2]="680" [attr.y1]="t.y" [attr.y2]="t.y" stroke="#E5E7EB" stroke-dasharray="3 3" />
+          <text x="40" [attr.y]="t.y + 4" text-anchor="end" font-size="11" fill="#6B7280">{{ t.v }}%</text>
+        }
+        <path [attr.d]="areaPath" fill="url(#area)" />
+        <path [attr.d]="linePath" fill="none" stroke="#7C5CFA" stroke-width="2.5" />
+        @for (p of points; track p.day) {
+          <circle [attr.cx]="p.x" [attr.cy]="p.y" r="4" fill="white" stroke="#7C5CFA" stroke-width="2" />
+          <text [attr.x]="p.x" y="208" text-anchor="middle" font-size="11" fill="#6B7280">{{ p.day }}</text>
+          @if (p.value === maxValue) {
+            <rect [attr.x]="p.x - 22" [attr.y]="p.y - 34" width="44" height="22" rx="8" fill="#4C3FC0" />
+            <text [attr.x]="p.x" [attr.y]="p.y - 19" text-anchor="middle" font-size="12" font-weight="600" fill="white">{{ p.value }}%</text>
+          }
+        }
+      </svg>
+    </div>
+
+    <div class="rounded-2xl bg-white p-5 shadow-sm">
+      <h3 class="mb-4 font-semibold text-navy">📶 Progression par matière</h3>
+      <div class="space-y-4">
+        @for (s of subjects; track s.name) {
+          <div>
+            <div class="mb-1 flex justify-between text-sm text-ink">
+              <span>{{ s.name }}</span><span class="font-semibold">{{ s.value }}%</span>
+            </div>
+            <div class="h-2.5 rounded-full bg-gray-100">
+              <div class="h-2.5 rounded-full" [class]="s.color" [style.width.%]="s.value"></div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="relative overflow-hidden rounded-2xl bg-linear-to-br from-emerald-50 to-primary-soft p-5 shadow-sm">
+      <h3 class="font-semibold text-navy">État de la Smart Doll</h3>
+      <span class="mt-1 inline-flex items-center gap-1 rounded-full bg-white/70 px-2 py-0.5 text-xs text-success">● Connectée</span>
+      <ul class="mt-4 space-y-3 text-sm text-ink">
+        <li>🔋 <b>82%</b> <span class="text-xs">Batterie</span></li>
+        <li>📶 <b>Stable</b> <span class="text-xs">Wi-Fi</span></li>
+        <li class="text-xs">🕒 Dernière sync. <b>Aujourd'hui • 18:32</b></li>
+      </ul>
+      <img src="/images/doll-status.png" alt="" class="absolute -right-2 top-4 h-44" />
+      <button class="relative mt-6 w-full rounded-full bg-primary py-2 text-xs font-medium text-white hover:bg-primary-dark">
+        Voir les détails →
+      </button>
+    </div>
+  </section>
+
+  <!-- Activité + reco + notifications -->
+  <section class="grid gap-4 xl:grid-cols-3">
+
+    <div class="rounded-2xl bg-white p-5 shadow-sm">
+      <div class="mb-3 flex justify-between">
+        <h3 class="font-semibold text-navy">⚡ Activité récente</h3>
+        <a href="#" class="text-xs text-primary">Voir tout →</a>
+      </div>
+      <ul class="space-y-3">
+        @for (a of activities; track a.title) {
+          <li class="flex items-center gap-3">
+            <span class="text-xl">{{ a.icon }}</span>
+            <div>
+              <p class="text-sm font-semibold text-navy">{{ a.title }}</p>
+              <p class="text-[11px] text-ink/60">{{ a.meta }}</p>
+            </div>
+          </li>
+        }
+      </ul>
+    </div>
+
+    <div class="flex items-center gap-4 rounded-2xl bg-linear-to-br from-orange-50 to-white p-5 shadow-sm">
+      <div class="text-6xl">💡</div>
+      <div>
+        <h3 class="text-sm font-semibold text-navy">⭐ Recommandation personnalisée</h3>
+        <p class="mt-2 text-sm font-semibold text-navy">Lina maîtrise bien les additions !</p>
+        <p class="text-xs text-ink/70">Nous vous conseillons de proposer 5 exercices de soustractions.</p>
+        <button class="mt-3 rounded-full bg-primary px-4 py-1.5 text-xs font-medium text-white hover:bg-primary-dark">
+          Voir les activités →
+        </button>
+      </div>
+    </div>
+
+    <div class="rounded-2xl bg-white p-5 shadow-sm">
+      <div class="mb-3 flex justify-between">
+        <h3 class="font-semibold text-navy">🔔 Notifications</h3>
+        <a href="#" class="text-xs text-primary">Voir tout →</a>
+      </div>
+      <ul class="space-y-3">
+        @for (n of notifications; track n.text) {
+          <li class="flex items-center justify-between gap-2 text-xs text-navy">
+            <span>{{ n.icon }} {{ n.text }}</span>
+            <span class="shrink-0 text-ink/50">{{ n.time }}</span>
+          </li>
+        }
+      </ul>
+    </div>
+  </section>
+</div>

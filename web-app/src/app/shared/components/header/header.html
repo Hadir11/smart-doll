@@ -1,0 +1,15 @@
+<header class="flex items-center gap-4 rounded-2xl bg-white px-5 py-3 shadow-sm">
+  <div class="flex flex-1 items-center gap-2 text-sm text-ink/60">
+    <span>🔍</span>
+    <input type="search" placeholder="Rechercher une fonctionnalité..."
+           class="w-full bg-transparent outline-none" />
+  </div>
+  <button class="relative rounded-full p-2 hover:bg-surface" aria-label="Notifications">
+    🔔
+    <span class="absolute right-0 top-0 flex h-4 w-4 items-center justify-center rounded-full bg-danger text-[10px] text-white">2</span>
+  </button>
+  <div class="flex items-center gap-2">
+    <img src="/images/avatar-parent.png" alt="" class="h-8 w-8 rounded-full object-cover" />
+    <span class="text-sm font-medium text-navy">Bonjour, {{ auth.user()?.name }}</span>
+  </div>
+</header>

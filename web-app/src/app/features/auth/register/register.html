@@ -1,0 +1,73 @@
+<div class="flex min-h-screen items-center justify-center bg-surface p-8 text-ink">
+  <div class="flex w-full max-w-[820px] flex-wrap overflow-hidden rounded-[28px] bg-white">
+
+    <div class="flex min-w-[280px] flex-1 flex-col items-center justify-center gap-5 bg-primary-soft p-8">
+      <div class="rounded-2xl bg-white px-4 py-2.5 text-center text-[13px] font-extrabold text-navy">
+        Bienvenue<br />dans Smart Doll !
+      </div>
+      <app-mascot [size]="200" />
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="flex min-w-[320px] flex-[1.2] flex-col gap-3.5 p-9">
+
+      <a routerLink="/" class="flex items-center gap-1 self-start text-[13px] font-bold text-muted hover:text-primary">
+        ← Retour à l'accueil
+      </a>
+
+      <div class="text-center">
+        <div class="text-xl font-extrabold text-navy">Smart Doll</div>
+        <h1 class="mb-1 mt-2.5 text-[26px] font-extrabold text-navy">Créer un compte</h1>
+        <p class="text-sm text-muted">Rejoignez l'univers Smart Doll</p>
+      </div>
+
+      <div>
+        <label class="field-label" for="name">Nom complet</label>
+        <input id="name" formControlName="name" placeholder="Sarah Martin" class="field-input" />
+        @if (form.controls.name.touched && form.controls.name.invalid) {
+          <p class="mt-1 text-xs text-danger">Le nom est obligatoire.</p>
+        }
+      </div>
+
+      <div>
+        <label class="field-label" for="mail">Adresse email</label>
+        <input id="mail" type="email" formControlName="email" placeholder="parent@exemple.com" class="field-input" />
+        @if (form.controls.email.touched && form.controls.email.invalid) {
+          <p class="mt-1 text-xs text-danger">Email invalide.</p>
+        }
+      </div>
+
+      <div>
+        <label class="field-label" for="p1">Mot de passe</label>
+        <input id="p1" type="password" formControlName="password" placeholder="••••••••" class="field-input" />
+        @if (form.controls.password.touched && form.controls.password.invalid) {
+          <p class="mt-1 text-xs text-danger">6 caractères minimum.</p>
+        }
+      </div>
+
+      <div>
+        <label class="field-label" for="p2">Confirmer le mot de passe</label>
+        <input id="p2" type="password" formControlName="confirm" placeholder="••••••••" class="field-input" />
+        @if (form.controls.confirm.touched && form.hasError('mismatch')) {
+          <p class="mt-1 text-xs text-danger">Les mots de passe ne correspondent pas.</p>
+        }
+      </div>
+
+      <label class="flex items-start gap-2 text-xs">
+        <input type="checkbox" formControlName="terms" class="mt-0.5 accent-primary" />
+        J'accepte les conditions d'utilisation et la politique de confidentialité
+      </label>
+      @if (form.controls.terms.touched && form.controls.terms.invalid) {
+        <p class="text-xs text-danger">Vous devez accepter les conditions.</p>
+      }
+
+      <button type="submit" [disabled]="loading()" class="btn-primary">
+        {{ loading() ? 'Création...' : 'Créer mon compte' }}
+      </button>
+
+      <p class="text-center text-[13px]">
+        Déjà un compte ?
+        <a routerLink="/login" class="font-bold text-primary hover:underline">Se connecter</a>
+      </p>
+    </form>
+  </div>
+</div>

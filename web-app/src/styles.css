@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Nunito', ui-sans-serif, system-ui, sans-serif;
+  --color-primary: #B84E14;
+  --color-primary-dark: #8F3A0D;
+  --color-primary-soft: #FDEBDD;
+  --color-accent: #E8833A;
+  --color-navy: #4A2511;
+  --color-ink: #3B2A22;
+  --color-muted: #6B564B;
+  --color-line: #EBD3C0;
+  --color-surface: #FFF6EE;
+  --color-success: #3DBE8B;
+  --color-warning: #F4A340;
+  --color-danger: #D6455D;
+}
+
+@layer components {
+  .field-label { @apply mb-1.5 block text-[13px] font-bold text-navy; }
+  .field-input {
+    @apply h-[46px] w-full rounded-xl border-[1.5px] border-line bg-white px-3.5 text-sm text-ink
+           outline-none focus:border-primary focus:ring-2 focus:ring-primary/30;
+  }
+  .btn-primary {
+    @apply h-12 w-full rounded-full bg-primary text-[15px] font-bold text-white
+           hover:bg-primary-dark disabled:opacity-60;
+  }
+  .btn-outline {
+    @apply h-[46px] w-full rounded-xl border-[1.5px] border-line bg-white text-sm font-bold
+           text-navy hover:bg-surface;
+  }
+}

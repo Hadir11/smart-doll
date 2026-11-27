@@ -1,0 +1,58 @@
+<div class="flex min-h-screen items-center justify-center bg-surface p-8 text-ink">
+  <form [formGroup]="form" (ngSubmit)="submit()"
+        class="flex w-full max-w-[400px] flex-col gap-4 rounded-[28px] bg-white p-9">
+
+    <a routerLink="/" class="flex items-center gap-1 self-start text-[13px] font-bold text-muted hover:text-primary">
+      ← Retour à l'accueil
+    </a>
+
+    <div class="text-center">
+      <app-mascot [size]="64" class="inline-block" />
+      <div class="text-xl font-extrabold text-navy">Smart Doll</div>
+      <div class="text-xs text-muted">Learn • Grow • Smile</div>
+      <h1 class="mb-1 mt-4 text-[26px] font-extrabold text-navy">Se connecter</h1>
+      <p class="text-sm text-muted">Accédez à votre espace parent</p>
+    </div>
+
+    <div>
+      <label class="field-label" for="email">Adresse email</label>
+      <input id="email" type="email" formControlName="email" placeholder="parent@exemple.com" class="field-input" />
+      @if (form.controls.email.touched && form.controls.email.invalid) {
+        <p class="mt-1 text-xs text-danger">Email invalide.</p>
+      }
+    </div>
+
+    <div>
+      <label class="field-label" for="password">Mot de passe</label>
+      <input id="password" type="password" formControlName="password" placeholder="••••••••" class="field-input" />
+      @if (form.controls.password.touched && form.controls.password.invalid) {
+        <p class="mt-1 text-xs text-danger">6 caractères minimum.</p>
+      }
+    </div>
+
+    <div class="flex justify-between text-[13px]">
+      <label class="flex items-center gap-2">
+        <input type="checkbox" class="accent-primary" /> Se souvenir de moi
+      </label>
+      <a href="#" class="font-bold text-primary hover:underline">Mot de passe oublié ?</a>
+    </div>
+
+    @if (error()) {
+      <p class="text-sm text-danger">{{ error() }}</p>
+    }
+
+    <button type="submit" [disabled]="loading()" class="btn-primary">
+      {{ loading() ? 'Connexion...' : 'Se connecter' }}
+    </button>
+
+    <div class="text-center text-xs text-muted">ou</div>
+
+    <button type="button" class="btn-outline">Continuer avec Google</button>
+    <button type="button" class="btn-outline">Continuer avec Apple</button>
+
+    <p class="text-center text-[13px]">
+      Pas encore de compte ?
+      <a routerLink="/register" class="font-bold text-primary hover:underline">Créer un compte</a>
+    </p>
+  </form>
+</div>
