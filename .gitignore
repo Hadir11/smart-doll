@@ -1,6 +1,6 @@
-﻿node_modules/
-dist/
-.angular/
-*.log
-secrets.h
-.env
+﻿.env
+.venv/
+__pycache__/
+*.db
+mosquitto/config/passwd
+mosquitto/data/
