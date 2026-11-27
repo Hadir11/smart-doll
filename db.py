@@ -40,6 +40,11 @@ CREATE TABLE IF NOT EXISTS events (
   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   doll_id TEXT, type TEXT, detail TEXT, created_at TIMESTAMPTZ DEFAULT now());
 
+CREATE TABLE IF NOT EXISTS progress (
+  child_id BIGINT REFERENCES children(id), topic_id BIGINT REFERENCES topics(id),
+  level INT DEFAULT 1, updated_at TIMESTAMPTZ DEFAULT now(),
+  PRIMARY KEY (child_id, topic_id));
+  
 ALTER TABLE parents  ENABLE ROW LEVEL SECURITY;
 ALTER TABLE children ENABLE ROW LEVEL SECURITY;
 ALTER TABLE topics   ENABLE ROW LEVEL SECURITY;
@@ -47,6 +52,7 @@ ALTER TABLE sessions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE messages ENABLE ROW LEVEL SECURITY;
 ALTER TABLE attempts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE events   ENABLE ROW LEVEL SECURITY;
+ALTER TABLE progress ENABLE ROW LEVEL SECURITY;
 """
 
 def init_db():
@@ -70,3 +76,38 @@ def fetch_one(sql, params=()):
 def execute(sql, params=()):
     with pool.connection() as conn:
         conn.execute(sql, params)
+        
+
+
+def get_child_by_doll(doll_id):
+    return fetch_one("SELECT * FROM children WHERE doll_id=%s ORDER BY id LIMIT 1", (doll_id,))
+
+def get_topic(topic_id):
+    return fetch_one("SELECT * FROM topics WHERE id=%s", (topic_id,))
+
+def first_active_topic(parent_id):
+    return fetch_one("SELECT * FROM topics WHERE parent_id=%s AND active ORDER BY id LIMIT 1", (parent_id,))
+
+def get_level(child_id, topic_id):
+    row = fetch_one("SELECT level FROM progress WHERE child_id=%s AND topic_id=%s", (child_id, topic_id))
+    return row["level"] if row else 1
+
+def save_level(child_id, topic_id, level):
+    execute("""INSERT INTO progress (child_id, topic_id, level) VALUES (%s,%s,%s)
+               ON CONFLICT (child_id, topic_id) DO UPDATE SET level=EXCLUDED.level, updated_at=now()""",
+            (child_id, topic_id, level))
+
+def create_session(child_id, topic_id):
+    return fetch_one("INSERT INTO sessions (child_id, topic_id) VALUES (%s,%s) RETURNING id",
+                     (child_id, topic_id))["id"]
+
+def end_session(session_id):
+    execute("UPDATE sessions SET ended_at=now() WHERE id=%s", (session_id,))
+
+def add_message(session_id, role, text):
+    execute("INSERT INTO messages (session_id, role, text) VALUES (%s,%s,%s)", (session_id, role, text))
+
+def add_attempt(session_id, topic_id, question, answer, is_correct, difficulty):
+    execute("""INSERT INTO attempts (session_id, topic_id, question, child_answer, is_correct, difficulty)
+               VALUES (%s,%s,%s,%s,%s,%s)""",
+            (session_id, topic_id, question, answer, is_correct, difficulty))
